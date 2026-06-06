@@ -15,21 +15,36 @@ function App() {
   const [fortune, setFortune] = useState<FortuneResult | null>(null)
 
   return (
-    <main className="app">
-      <SurpriseDraw onResultChange={setFortune} />
+    <div className="page">
+      <div className="page-blob page-blob--sky" aria-hidden="true" />
+      <div className="page-blob page-blob--mint" aria-hidden="true" />
+      <div className="page-blob page-blob--sun" aria-hidden="true" />
 
-      <ShareButton
-        title={SHARE_TITLE}
-        text={buildShareText(fortune)}
-        disabled={false}
-      />
+      <main className="app">
+        <header className="app-brand">
+          <span className="app-brand__icon" aria-hidden="true">
+            🎋
+          </span>
+          <span className="app-brand__name">Share Everything</span>
+        </header>
 
-      <CapabilityProbe />
+        <section className="app-card">
+          <SurpriseDraw onResultChange={setFortune} />
 
-      <footer className="app-footer">
-        <p>Share Everything · 微信分享闭环最小 Demo</p>
-      </footer>
-    </main>
+          <ShareButton
+            title={SHARE_TITLE}
+            text={buildShareText(fortune)}
+            disabled={false}
+          />
+        </section>
+
+        <CapabilityProbe />
+
+        <footer className="app-footer">
+          <p>轻量小工具 · 微信分享闭环 Demo</p>
+        </footer>
+      </main>
+    </div>
   )
 }
 

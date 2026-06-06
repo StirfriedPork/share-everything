@@ -48,7 +48,10 @@ export function SurpriseDraw({ onResultChange }: SurpriseDrawProps) {
         <p className="subtitle">一键抽签，结果值得分享给朋友</p>
       </header>
 
-      <div className={`fortune-card ${result ? 'has-result' : ''} ${animating ? 'animating' : ''}`}>
+      <div
+        className={`fortune-card ${result ? 'has-result' : ''} ${animating ? 'animating' : ''}`}
+      >
+        <div className="fortune-card__ribbon" aria-hidden="true" />
         {result ? (
           <>
             <span className="fortune-emoji" aria-hidden="true">
@@ -58,11 +61,17 @@ export function SurpriseDraw({ onResultChange }: SurpriseDrawProps) {
             <p className="fortune-text">{result.text}</p>
           </>
         ) : (
-          <p className="fortune-placeholder">点击下方按钮，抽取你的今日惊喜签</p>
+          <>
+            <span className="fortune-card__idle-icon" aria-hidden="true">
+              ✦
+            </span>
+            <p className="fortune-placeholder">点击下方按钮，抽取你的今日惊喜签</p>
+          </>
         )}
       </div>
 
       <button type="button" className="draw-button" onClick={draw} disabled={animating}>
+        <span className="draw-button__shine" aria-hidden="true" />
         {animating ? '抽签中…' : result ? '再抽一签' : '开始抽签'}
       </button>
     </section>

@@ -1,9 +1,26 @@
 :root {
-  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --color-bg: #f4fbf8;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f0faf5;
+  --color-text: #2d4a42;
+  --color-text-muted: #6b8f82;
+  --color-heading: #1a3d34;
+  --color-primary: #3ecf9a;
+  --color-primary-dark: #2db87f;
+  --color-accent: #5ec8f2;
+  --color-accent-soft: #e8f7fd;
+  --color-warm: #ffd89a;
+  --color-border: rgba(62, 207, 154, 0.18);
+  --color-shadow: rgba(42, 120, 95, 0.1);
+  --radius-lg: 1.5rem;
+  --radius-md: 1rem;
+  --radius-pill: 999px;
+
+  font-family: 'Noto Sans SC', system-ui, -apple-system, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  color: #f8fafc;
-  background-color: #0b1220;
+  color: var(--color-text);
+  background-color: var(--color-bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -21,9 +38,10 @@ body {
   min-width: 320px;
   min-height: 100dvh;
   background:
-    radial-gradient(circle at 10% 0%, rgba(139, 92, 246, 0.22), transparent 42%),
-    radial-gradient(circle at 90% 10%, rgba(236, 72, 153, 0.16), transparent 38%),
-    #0b1220;
+    radial-gradient(circle at 8% 12%, rgba(94, 200, 242, 0.28), transparent 36%),
+    radial-gradient(circle at 92% 8%, rgba(255, 216, 154, 0.35), transparent 32%),
+    radial-gradient(circle at 50% 100%, rgba(62, 207, 154, 0.16), transparent 42%),
+    var(--color-bg);
 }
 
 #root {
