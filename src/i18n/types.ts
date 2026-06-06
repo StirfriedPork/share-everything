@@ -33,14 +33,16 @@ export interface Translations {
     x: string
     telegram: string
     reddit: string
+    whatsapp: string
+    instagram: string
+    facebook: string
     native: string
     nativeOk: string
     nativeCancelled: string
-    copyOk: string
+    instagramCopied: string
     copyError: string
     resultPrefix: string
     defaultText: string
   }
-  footer: string
   lang: Record<Locale, string>
 }

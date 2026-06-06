@@ -42,10 +42,6 @@ function App() {
           <SurpriseDraw onResultChange={setFortune} />
           <SharePanel title={sharePayload.title} text={sharePayload.text} />
         </section>
-
-        <footer className="app-footer">
-          <p>{t.footer}</p>
-        </footer>
       </main>
     </div>
   )
