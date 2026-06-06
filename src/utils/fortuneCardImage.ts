@@ -4,7 +4,7 @@ import { buildAppEntryUrl } from './siteUrl'
 import { drawCircularQrCode, resolveQrLogo } from './circularQrCode'
 
 /** Set to true when QR code on share images is ready to ship. */
-const SHOW_SHARE_QR = false
+const SHOW_SHARE_QR = true
 
 export interface FortuneCardImageInput {
   locale: Locale

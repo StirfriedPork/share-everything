@@ -1,6 +1,6 @@
 import type { AppId } from '../apps/types'
 
-const DEFAULT_SITE_URL = 'https://share-everything.vercel.app'
+const DEFAULT_SITE_URL = 'https://share-everything-omega.vercel.app'
 
 /** Canonical production origin used in QR codes and share links. */
 export function getCanonicalSiteUrl(): string {

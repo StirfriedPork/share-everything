@@ -2,14 +2,14 @@
 
 轻量社交分享小工具合集，首个应用为 **好运签（Fortune Draw）**——一键抽签、生成分享文案与运势卡片图，方便转发到海外社交平台。
 
-**在线预览**：[https://share-everything.vercel.app/?app=fortune](https://share-everything.vercel.app/?app=fortune)
+**在线预览**：[https://share-everything-omega.vercel.app/#fortune](https://share-everything-omega.vercel.app/#fortune)
 
 ## 特性
 
 - **多应用架构**：左上角图标切换 mini-app；好运签已上线，每日一句、幸运数字待开发
 - **中英文**：界面与签文双语，语言偏好自动保存
 - **社交分享**：X、Telegram、Reddit、WhatsApp、Instagram、Facebook；移动端支持系统原生分享
-- **运势分享图**：中吉 / 大吉签文自动生成 PNG 卡片（运势 emoji、等级、文案）；二维码功能已预留，当前默认关闭
+- **运势分享图**：中吉 / 大吉签文自动生成 PNG 卡片（运势 emoji、等级、文案），底部含圆形二维码扫码进入站点
 - **链接规范**：分享与扫码入口统一为 `?app=fortune` 形式，便于跨平台传播
 
 ## 技术栈
@@ -31,14 +31,14 @@ npm run dev
 
 ```bash
 # PowerShell
-$env:VITE_SITE_URL = "https://share-everything.vercel.app"
+$env:VITE_SITE_URL = "https://share-everything-omega.vercel.app"
 npm run build
 npm run preview
 ```
 
 ```bash
 # Bash
-VITE_SITE_URL=https://share-everything.vercel.app npm run build
+VITE_SITE_URL=https://share-everything-omega.vercel.app npm run build
 ```
 
 也可复制 [.env.example](.env.example) 为 `.env.production` 并修改 `VITE_SITE_URL`。Vercel 部署已内置 [`.env.production`](.env.production)。
@@ -89,7 +89,7 @@ src/
 
 ## 分享图二维码（可选）
 
-运势卡片底部二维码由 `src/utils/fortuneCardImage.ts` 中的 `SHOW_SHARE_QR` 控制，当前为 `false`。需要启用时改为 `true` 并重新构建部署。
+运势卡片底部二维码由 `src/utils/fortuneCardImage.ts` 中的 `SHOW_SHARE_QR` 控制，当前已启用。需要临时关闭时改为 `false` 并重新构建部署。
 
 ## License
 
