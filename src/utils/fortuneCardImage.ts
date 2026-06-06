@@ -1,4 +1,6 @@
+import type { AppId } from '../apps/types'
 import type { Locale } from '../i18n/types'
+import { buildAppEntryUrl } from './siteUrl'
 import { drawCircularQrCode, resolveQrLogo } from './circularQrCode'
 
 export interface FortuneCardImageInput {
@@ -6,8 +8,8 @@ export interface FortuneCardImageInput {
   emoji: string
   level: string
   body: string
-  url: string
   tier: 'excellent' | 'good'
+  appId: AppId
   appIconSrc?: string
   appIconEmoji?: string
 }
@@ -28,16 +30,6 @@ function wrapText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number)
   }
   if (line) lines.push(line)
   return lines
-}
-
-function buildQrUrl(shareUrl: string): string {
-  try {
-    const u = new URL(shareUrl)
-    const hash = u.hash || '#fortune'
-    return `${u.origin}${u.pathname || '/'}${hash}`
-  } catch {
-    return shareUrl
-  }
 }
 
 export async function generateFortuneCardImage(input: FortuneCardImageInput): Promise<Blob> {
@@ -92,8 +84,25 @@ export async function generateFortuneCardImage(input: FortuneCardImageInput): Pr
     ctx.fillText(line, width / 2, 270 + i * 34)
   })
 
+  const cardTop = 56
+  const cardHeight = height - 112
+  const cardBottom = cardTop + cardHeight
+  const textBottom = 270 + lines.length * 34
+  const bottomPadding = 16
+  const topGap = 18
+  const available = cardBottom - bottomPadding - textBottom - topGap
+  const qrRadius = Math.min(98, Math.max(86, Math.floor(available / 2)))
+  const qrCenterY = cardBottom - bottomPadding - qrRadius
+
   const qrLogo = await resolveQrLogo(input.appIconSrc, input.appIconEmoji)
-  drawCircularQrCode(ctx, width / 2, height - 118, 72, buildQrUrl(input.url), qrLogo)
+  drawCircularQrCode(
+    ctx,
+    width / 2,
+    qrCenterY,
+    qrRadius,
+    buildAppEntryUrl(input.appId),
+    qrLogo,
+  )
 
   return new Promise((resolve, reject) => {
     canvas.toBlob((blob) => {

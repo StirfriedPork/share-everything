@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useState } from 'react'
 import { getAppById, isAppId } from '../apps/registry'
 import type { AppId } from '../apps/types'
+import { readAppIdFromLocation } from '../utils/siteUrl'
 
 const STORAGE_KEY = 'share-everything-active-app'
 const DEFAULT_APP: AppId = 'fortune'
 
 function readInitialApp(): AppId {
-  const hash = location.hash.replace('#', '')
-  if (isAppId(hash)) return hash
+  const fromLocation = readAppIdFromLocation()
+  if (fromLocation) return fromLocation
 
   const stored = localStorage.getItem(STORAGE_KEY)
   if (stored && isAppId(stored)) return stored
@@ -25,13 +26,29 @@ export function useActiveApp() {
   }, [])
 
   useEffect(() => {
-    const onHashChange = () => {
-      const hash = location.hash.replace('#', '')
-      if (isAppId(hash)) setActiveAppState(hash)
+    const syncFromLocation = () => {
+      const appId = readAppIdFromLocation()
+      if (appId) setActiveAppState(appId)
     }
+
+    const onHashChange = () => syncFromLocation()
     window.addEventListener('hashchange', onHashChange)
-    if (!location.hash) location.hash = activeApp
-    return () => window.removeEventListener('hashchange', onHashChange)
+    window.addEventListener('popstate', onHashChange)
+
+    const fromLocation = readAppIdFromLocation()
+    if (fromLocation) {
+      localStorage.setItem(STORAGE_KEY, fromLocation)
+      if (location.hash.replace('#', '') !== fromLocation) {
+        location.hash = fromLocation
+      }
+    } else if (!location.hash) {
+      location.hash = activeApp
+    }
+
+    return () => {
+      window.removeEventListener('hashchange', onHashChange)
+      window.removeEventListener('popstate', onHashChange)
+    }
   }, [activeApp])
 
   const appDef = getAppById(activeApp)

@@ -99,8 +99,8 @@ export function SharePanel({ fortune, shareContent, url }: SharePanelProps) {
       emoji: entry.emoji,
       level: entry.level[locale],
       body: entry.text[locale],
-      url: shareUrl,
       tier: entry.tier as 'excellent' | 'good',
+      appId: 'fortune' as const,
       appIconSrc: app?.iconSrc,
       appIconEmoji: app?.icon,
     }
