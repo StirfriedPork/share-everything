@@ -1,8 +1,11 @@
 export type Locale = 'zh' | 'en'
 
+export type FortuneTier = 'excellent' | 'good' | 'normal'
+
 export interface FortuneEntry {
   id: string
   emoji: string
+  tier: FortuneTier
   level: Record<Locale, string>
   text: Record<Locale, string>
 }
@@ -40,9 +43,18 @@ export interface Translations {
     nativeOk: string
     nativeCancelled: string
     instagramCopied: string
+    instagramCopiedWithImage: string
     copyError: string
     resultPrefix: string
     defaultText: string
+    previewTitle: string
+    previewEmpty: string
+    fortuneHeadline: string
+    tryYourLuck: string
+    excellentBadge: string
+    saveImage: string
+    imageSaved: string
+    imageShareOk: string
   }
   lang: Record<Locale, string>
 }

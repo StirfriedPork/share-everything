@@ -35,7 +35,7 @@ export function SurpriseDraw({ onResultChange }: SurpriseDrawProps) {
       </header>
 
       <div
-        className={`fortune-card ${result ? 'has-result' : ''} ${animating ? 'animating' : ''}`}
+        className={`fortune-card ${result ? 'has-result' : ''} ${animating ? 'animating' : ''} ${fortune?.tier === 'excellent' ? 'fortune-card--excellent' : fortune?.tier === 'good' ? 'fortune-card--good' : ''}`}
       >
         <div className="fortune-card__ribbon" aria-hidden="true" />
         {fortune ? (

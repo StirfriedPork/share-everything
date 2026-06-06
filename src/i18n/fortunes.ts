@@ -1,9 +1,10 @@
-import type { FortuneEntry } from './types'
+import type { FortuneEntry, FortuneTier } from './types'
 
 export const FORTUNES: FortuneEntry[] = [
   {
     id: 'great',
     emoji: '🌟',
+    tier: 'excellent',
     level: { zh: '大吉', en: 'Great Luck' },
     text: {
       zh: '今天适合放手一搏，惊喜正在路上。',
@@ -13,6 +14,7 @@ export const FORTUNES: FortuneEntry[] = [
   {
     id: 'good',
     emoji: '✨',
+    tier: 'good',
     level: { zh: '中吉', en: 'Good Luck' },
     text: {
       zh: '保持松弛感，好事会在不经意间出现。',
@@ -22,6 +24,7 @@ export const FORTUNES: FortuneEntry[] = [
   {
     id: 'mild',
     emoji: '🍀',
+    tier: 'normal',
     level: { zh: '小吉', en: 'Mild Luck' },
     text: {
       zh: '小小确幸已到位，记得抬头看看天空。',
@@ -31,6 +34,7 @@ export const FORTUNES: FortuneEntry[] = [
   {
     id: 'top',
     emoji: '🎉',
+    tier: 'excellent',
     level: { zh: '上上签', en: 'Top Fortune' },
     text: {
       zh: '贵人运爆棚，分享这份好运给一个朋友吧。',
@@ -40,6 +44,7 @@ export const FORTUNES: FortuneEntry[] = [
   {
     id: 'surprise',
     emoji: '💫',
+    tier: 'excellent',
     level: { zh: '惊喜签', en: 'Surprise Draw' },
     text: {
       zh: '你即将收到一条让你会心一笑的消息。',
@@ -49,6 +54,7 @@ export const FORTUNES: FortuneEntry[] = [
   {
     id: 'turn',
     emoji: '🔮',
+    tier: 'good',
     level: { zh: '转运签', en: 'Turning Point' },
     text: {
       zh: '旧烦恼清零，新灵感满格。',
@@ -58,6 +64,7 @@ export const FORTUNES: FortuneEntry[] = [
   {
     id: 'charm',
     emoji: '💝',
+    tier: 'excellent',
     level: { zh: '桃花签', en: 'Charm Boost' },
     text: {
       zh: '魅力值 +100，适合主动一点点。',
@@ -67,6 +74,7 @@ export const FORTUNES: FortuneEntry[] = [
   {
     id: 'wealth',
     emoji: '💰',
+    tier: 'excellent',
     level: { zh: '暴富签', en: 'Fortune Flow' },
     text: {
       zh: '钱包可能不会立刻鼓，但运气已经开门。',
@@ -82,4 +90,8 @@ export function pickFortuneId(): string {
 
 export function getFortuneById(id: string): FortuneEntry | undefined {
   return FORTUNES.find((f) => f.id === id)
+}
+
+export function isHighlightTier(tier: FortuneTier): boolean {
+  return tier === 'excellent' || tier === 'good'
 }

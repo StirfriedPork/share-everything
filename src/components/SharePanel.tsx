@@ -1,11 +1,19 @@
-import { useState, type ReactElement } from 'react'
+import { useMemo, useState, type ReactElement } from 'react'
 import { useI18n } from '../i18n/I18nProvider'
+import type { FortuneResult } from '../i18n/types'
+import { getFortuneById } from '../i18n/fortunes'
 import { canNativeShare } from '../utils/env'
-import { shareToSocial, type SocialPlatform } from '../utils/socialShare'
+import type { ShareContent } from '../utils/shareContent'
+import {
+  saveFortuneImage,
+  shareToSocial,
+  shareWithNative,
+  type SocialPlatform,
+} from '../utils/socialShare'
 
 interface SharePanelProps {
-  title: string
-  text: string
+  fortune: FortuneResult | null
+  shareContent: ShareContent
   url?: string
 }
 
@@ -75,35 +83,80 @@ const PLATFORMS: {
   { id: 'facebook', className: 'share-platform--facebook', Icon: FacebookIcon, labelKey: 'facebook' },
 ]
 
-export function SharePanel({ title, text, url }: SharePanelProps) {
-  const { t } = useI18n()
+export function SharePanel({ fortune, shareContent, url }: SharePanelProps) {
+  const { locale, t } = useI18n()
   const [hint, setHint] = useState<string | null>(null)
   const shareUrl = url ?? location.href
-  const payload = { title, text, url: shareUrl }
+
+  const imageInput = useMemo(() => {
+    if (!shareContent.imageWorthy || !fortune) return null
+    const entry = getFortuneById(fortune.id)
+    if (!entry || entry.tier === 'normal') return null
+    return {
+      locale,
+      emoji: entry.emoji,
+      level: entry.level[locale],
+      body: entry.text[locale],
+      brand: t.brand,
+      url: shareUrl,
+      tier: entry.tier as 'excellent' | 'good',
+    }
+  }, [shareContent.imageWorthy, fortune, locale, t.brand, shareUrl])
+
+  const payload = {
+    title: shareContent.title,
+    text: shareContent.longText,
+    url: shareUrl,
+    imageInput,
+  }
 
   const handlePlatform = async (platform: SocialPlatform) => {
     const result = await shareToSocial(platform, payload)
-    if (result === 'copied') setHint(t.share.instagramCopied)
+    if (result === 'copied_with_image') setHint(t.share.instagramCopiedWithImage)
+    else if (result === 'copied') setHint(t.share.instagramCopied)
     else if (result === 'failed') setHint(t.share.copyError)
     else setHint(null)
   }
 
   const handleNative = async () => {
-    if (!canNativeShare({ title, text, url: shareUrl })) return
-    try {
-      await navigator.share({ title, text, url: shareUrl })
-      setHint(t.share.nativeOk)
-    } catch (err) {
-      if (err instanceof Error && err.name === 'AbortError') {
-        setHint(t.share.nativeCancelled)
-      }
-    }
+    const result = await shareWithNative(payload)
+    if (result === 'ok') setHint(t.share.imageShareOk)
+    else if (result === 'cancelled') setHint(t.share.nativeCancelled)
   }
 
-  const showNative = canNativeShare({ title, text, url: shareUrl })
+  const handleSaveImage = async () => {
+    const ok = await saveFortuneImage(payload)
+    setHint(ok ? t.share.imageSaved : t.share.copyError)
+  }
+
+  const showNative = canNativeShare({ title: payload.title, text: payload.text, url: shareUrl })
 
   return (
     <section className="share-panel">
+      <div className={`share-preview ${shareContent.imageWorthy ? 'share-preview--highlight' : ''}`}>
+        <p className="share-preview__label">{t.share.previewTitle}</p>
+        {fortune && shareContent.level ? (
+          <>
+            {shareContent.tier === 'excellent' && (
+              <span className="share-preview__badge">{t.share.excellentBadge}</span>
+            )}
+            <p className="share-preview__headline">
+              {shareContent.emoji} {shareContent.level}
+            </p>
+            <p className="share-preview__body">{shareContent.body}</p>
+            <p className="share-preview__cta">{t.share.tryYourLuck}</p>
+          </>
+        ) : (
+          <p className="share-preview__empty">{t.share.previewEmpty}</p>
+        )}
+      </div>
+
+      {shareContent.imageWorthy && (
+        <button type="button" className="share-save-image" onClick={() => void handleSaveImage()}>
+          {t.share.saveImage}
+        </button>
+      )}
+
       <header className="share-panel__header">
         <h2 className="share-panel__title">{t.share.title}</h2>
         <p className="share-panel__hint">{t.share.hint}</p>
@@ -122,7 +175,7 @@ export function SharePanel({ title, text, url }: SharePanelProps) {
           </button>
         ))}
         {showNative && (
-          <button type="button" className="share-platform share-platform--native" onClick={handleNative}>
+          <button type="button" className="share-platform share-platform--native" onClick={() => void handleNative()}>
             <span className="share-platform__dots" aria-hidden="true">
               ···
             </span>
