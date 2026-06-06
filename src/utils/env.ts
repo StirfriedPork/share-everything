@@ -1,5 +1,3 @@
-export const isWeChat = /MicroMessenger/i.test(navigator.userAgent)
-
 export const isHttps =
   location.protocol === 'https:' ||
   location.hostname === 'localhost' ||
@@ -15,17 +13,5 @@ export function canNativeShare(data?: ShareData): boolean {
     return navigator.canShare(data)
   } catch {
     return false
-  }
-}
-
-export function getEnvironmentInfo() {
-  return {
-    userAgent: navigator.userAgent,
-    isWeChat,
-    isHttps,
-    hasNativeShare,
-    hasCanShare: typeof navigator.canShare === 'function',
-    hasClipboard: !!navigator.clipboard?.writeText,
-    url: location.href,
   }
 }

@@ -16,7 +16,14 @@
   --radius-md: 1rem;
   --radius-pill: 999px;
 
-  font-family: 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    'PingFang SC',
+    'Hiragino Sans GB',
+    'Microsoft YaHei',
+    'Noto Sans SC',
+    sans-serif;
   line-height: 1.5;
   font-weight: 400;
   color: var(--color-text);
