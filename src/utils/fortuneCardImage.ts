@@ -3,6 +3,9 @@ import type { Locale } from '../i18n/types'
 import { buildAppEntryUrl } from './siteUrl'
 import { drawCircularQrCode, resolveQrLogo } from './circularQrCode'
 
+/** Set to true when QR code on share images is ready to ship. */
+const SHOW_SHARE_QR = false
+
 export interface FortuneCardImageInput {
   locale: Locale
   emoji: string
@@ -84,25 +87,27 @@ export async function generateFortuneCardImage(input: FortuneCardImageInput): Pr
     ctx.fillText(line, width / 2, 270 + i * 34)
   })
 
-  const cardTop = 56
-  const cardHeight = height - 112
-  const cardBottom = cardTop + cardHeight
-  const textBottom = 270 + lines.length * 34
-  const bottomPadding = 16
-  const topGap = 18
-  const available = cardBottom - bottomPadding - textBottom - topGap
-  const qrRadius = Math.min(98, Math.max(86, Math.floor(available / 2)))
-  const qrCenterY = cardBottom - bottomPadding - qrRadius
+  if (SHOW_SHARE_QR) {
+    const cardTop = 56
+    const cardHeight = height - 112
+    const cardBottom = cardTop + cardHeight
+    const textBottom = 270 + lines.length * 34
+    const bottomPadding = 16
+    const topGap = 18
+    const available = cardBottom - bottomPadding - textBottom - topGap
+    const qrRadius = Math.min(98, Math.max(86, Math.floor(available / 2)))
+    const qrCenterY = cardBottom - bottomPadding - qrRadius
 
-  const qrLogo = await resolveQrLogo(input.appIconSrc, input.appIconEmoji)
-  drawCircularQrCode(
-    ctx,
-    width / 2,
-    qrCenterY,
-    qrRadius,
-    buildAppEntryUrl(input.appId),
-    qrLogo,
-  )
+    const qrLogo = await resolveQrLogo(input.appIconSrc, input.appIconEmoji)
+    drawCircularQrCode(
+      ctx,
+      width / 2,
+      qrCenterY,
+      qrRadius,
+      buildAppEntryUrl(input.appId),
+      qrLogo,
+    )
+  }
 
   return new Promise((resolve, reject) => {
     canvas.toBlob((blob) => {
