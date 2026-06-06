@@ -1,13 +1,15 @@
 import type { Locale } from '../i18n/types'
+import { drawCircularQrCode, resolveQrLogo } from './circularQrCode'
 
 export interface FortuneCardImageInput {
   locale: Locale
   emoji: string
   level: string
   body: string
-  brand: string
   url: string
   tier: 'excellent' | 'good'
+  appIconSrc?: string
+  appIconEmoji?: string
 }
 
 function wrapText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number): string[] {
@@ -26,6 +28,16 @@ function wrapText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number)
   }
   if (line) lines.push(line)
   return lines
+}
+
+function buildQrUrl(shareUrl: string): string {
+  try {
+    const u = new URL(shareUrl)
+    const hash = u.hash || '#fortune'
+    return `${u.origin}${u.pathname || '/'}${hash}`
+  } catch {
+    return shareUrl
+  }
 }
 
 export async function generateFortuneCardImage(input: FortuneCardImageInput): Promise<Blob> {
@@ -80,14 +92,8 @@ export async function generateFortuneCardImage(input: FortuneCardImageInput): Pr
     ctx.fillText(line, width / 2, 270 + i * 34)
   })
 
-  ctx.font = '16px sans-serif'
-  ctx.fillStyle = '#6b8f82'
-  ctx.fillText(input.brand, width / 2, height - 88)
-
-  ctx.font = '14px sans-serif'
-  ctx.fillStyle = '#3ecf9a'
-  const urlShort = input.url.replace(/^https?:\/\//, '')
-  ctx.fillText(urlShort, width / 2, height - 58)
+  const qrLogo = await resolveQrLogo(input.appIconSrc, input.appIconEmoji)
+  drawCircularQrCode(ctx, width / 2, height - 118, 72, buildQrUrl(input.url), qrLogo)
 
   return new Promise((resolve, reject) => {
     canvas.toBlob((blob) => {

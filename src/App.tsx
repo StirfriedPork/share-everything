@@ -1,19 +1,16 @@
-import { useMemo, useState } from 'react'
+import { AppSwitcher } from './components/AppSwitcher'
 import { LanguageSwitcher } from './components/LanguageSwitcher'
-import { SharePanel } from './components/SharePanel'
-import { SurpriseDraw, type FortuneResult } from './components/SurpriseDraw'
+import { FortuneApp } from './apps/FortuneApp'
+import { PlaceholderApp } from './apps/PlaceholderApp'
+import { getAppById } from './apps/registry'
+import { useActiveApp } from './hooks/useActiveApp'
 import { useI18n } from './i18n/I18nProvider'
-import { buildShareContent } from './utils/shareContent'
 import './App.css'
 
 function App() {
-  const { locale, t } = useI18n()
-  const [fortune, setFortune] = useState<FortuneResult | null>(null)
-
-  const shareContent = useMemo(
-    () => buildShareContent(locale, fortune, t, location.href),
-    [fortune, locale, t],
-  )
+  const { t } = useI18n()
+  const { activeApp, setActiveApp } = useActiveApp()
+  const current = getAppById(activeApp)
 
   return (
     <div className="page">
@@ -23,19 +20,21 @@ function App() {
 
       <main className="app">
         <header className="app-topbar">
-          <div className="app-brand">
-            <span className="app-brand__icon" aria-hidden="true">
-              🎋
-            </span>
-            <span className="app-brand__name">{t.brand}</span>
+          <div className="app-topbar__left">
+            <AppSwitcher activeApp={activeApp} onChange={setActiveApp} />
+            <div className="app-brand">
+              <span className="app-brand__name">{t.brand}</span>
+              <span className="app-brand__app">{current ? t.nav.apps[activeApp] : ''}</span>
+            </div>
           </div>
           <LanguageSwitcher />
         </header>
 
-        <section className="app-card">
-          <SurpriseDraw onResultChange={setFortune} />
-          <SharePanel fortune={fortune} shareContent={shareContent} />
-        </section>
+        {activeApp === 'fortune' && current?.available ? (
+          <FortuneApp />
+        ) : (
+          <PlaceholderApp appId={activeApp} />
+        )}
       </main>
     </div>
   )

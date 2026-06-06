@@ -41,5 +41,17 @@ export const zh: Translations = {
     imageSaved: '分享图已保存到相册/下载文件夹',
     imageShareOk: '已分享运势文案与图片',
   },
+  nav: {
+    label: '应用导航',
+    switchApps: '切换应用',
+    soon: '待上线',
+    comingSoon: '即将上线',
+    comingSoonDesc: '这个小工具正在开发中，先看看好运签吧～',
+    apps: {
+      fortune: '好运签',
+      'daily-quote': '每日一句',
+      'lucky-number': '幸运数字',
+    },
+  },
   lang: { zh: '中文', en: 'English' },
 }

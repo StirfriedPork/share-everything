@@ -41,5 +41,17 @@ export const en: Translations = {
     imageSaved: 'Share image saved to downloads',
     imageShareOk: 'Shared fortune text and image',
   },
+  nav: {
+    label: 'Apps',
+    switchApps: 'Switch app',
+    soon: 'Soon',
+    comingSoon: 'Coming soon',
+    comingSoonDesc: 'This mini app is on the way — try Fortune Draw first!',
+    apps: {
+      fortune: 'Fortune Draw',
+      'daily-quote': 'Daily Quote',
+      'lucky-number': 'Lucky Number',
+    },
+  },
   lang: { zh: '中文', en: 'English' },
 }

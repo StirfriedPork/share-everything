@@ -1,3 +1,5 @@
+import type { AppId } from '../apps/types'
+
 export type Locale = 'zh' | 'en'
 
 export type FortuneTier = 'excellent' | 'good' | 'normal'
@@ -55,6 +57,14 @@ export interface Translations {
     saveImage: string
     imageSaved: string
     imageShareOk: string
+  }
+  nav: {
+    label: string
+    switchApps: string
+    soon: string
+    comingSoon: string
+    comingSoonDesc: string
+    apps: Record<AppId, string>
   }
   lang: Record<Locale, string>
 }

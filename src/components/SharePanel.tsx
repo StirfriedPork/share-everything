@@ -1,6 +1,7 @@
 import { useMemo, useState, type ReactElement } from 'react'
 import { useI18n } from '../i18n/I18nProvider'
 import type { FortuneResult } from '../i18n/types'
+import { getAppById } from '../apps/registry'
 import { getFortuneById } from '../i18n/fortunes'
 import { canNativeShare } from '../utils/env'
 import type { ShareContent } from '../utils/shareContent'
@@ -92,16 +93,18 @@ export function SharePanel({ fortune, shareContent, url }: SharePanelProps) {
     if (!shareContent.imageWorthy || !fortune) return null
     const entry = getFortuneById(fortune.id)
     if (!entry || entry.tier === 'normal') return null
+    const app = getAppById('fortune')
     return {
       locale,
       emoji: entry.emoji,
       level: entry.level[locale],
       body: entry.text[locale],
-      brand: t.brand,
       url: shareUrl,
       tier: entry.tier as 'excellent' | 'good',
+      appIconSrc: app?.iconSrc,
+      appIconEmoji: app?.icon,
     }
-  }, [shareContent.imageWorthy, fortune, locale, t.brand, shareUrl])
+  }, [shareContent.imageWorthy, fortune, locale, shareUrl])
 
   const payload = {
     title: shareContent.title,
